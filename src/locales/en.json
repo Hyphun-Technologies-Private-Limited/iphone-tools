@@ -1,0 +1,114 @@
+{
+  "general": {
+    "copyright": "iPhonecheck.services All Rights Reserved.",
+    "appversion": "App Version: 1.0.0 - Beta",
+    "account": "Account",
+    "apikey": "ApiKey",
+    "continuebutton": "Continue",
+    "cancelbutton": "Cancel"
+  },
+  "messages": {
+    "success": {
+      "updated": "Updated Successfully",
+      "apikeysuccess": "Api Updated Successfully"
+    },
+    "error": {
+      "invalid-data": "Invalid Input, please try again",
+      "apikeyerror": "Please enter Apikey in settings",
+      "imeierror": "Please import atleast one imei to proceed",
+      "serviceerror": "Please select a service to proceed",
+      "norecords": "No records found",
+      "maxlimit":"You can only send 1000 IMEIs in one order",
+      "orderprocessing":"Order is already in process, please wait or clear order for new order"
+    },
+    "fetching": "Fetching Records",
+    "confirm":{
+      "title":"Are you sure?",
+      "message":"All results will be lost",
+      "agree":"Yes, reset it",
+      "deny":"cancel"
+    }
+  },
+  "menu": {
+    "app": "iPhoneChecks",
+    "dashboard": "Dashboard",
+    "transactions": "Transactions",
+    "neworder": "Place order",
+    "orderhistory": "Orders History",
+    "fundsrequests": "Fund Requests",
+    "settings": "Settings",
+    "search": "Search",
+    "login": "Login",
+    "logout": "Logout",
+    "error": "Error"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Dashboard",
+      "statstitle": "Order Stats",
+      "ordersproccessing": "Orders in process",
+      "ordersrejected": "Orders Rejected",
+      "orderscompleted": "Orders Completed",
+      "availablebalance": "Available Balance",
+      "amountlocked": "Amount Locked",
+      "amountreceived": "Amount Received"
+    },
+    "neworder": {
+      "title": "Place New Order",
+      "selectservice": "Select Service",
+      "selectcategory": "Select Category",
+      "imeiboxmessage":"Enter IMEI/SN ONE PER LINE",
+      "importbutton": "Import IMEIs",
+      "submitbutton": "Submit Order",
+      "cancelbutton": "Clear",
+      "exportbutton": "Export Result",
+      "imeiimported": "IMEI(s) Imported:",
+      "orderstatus": "Order Status:",
+      "submitread":"Ready to submit",
+      "processing":"Processing",
+      "completed":"Completed, Export Now"
+    },
+    "orderhistory": {
+      "title": "Order History",
+      "completedtab": "Completed",
+      "rejectedtab": "Rejected",
+      "order": {
+        "orderid": "OrderId",
+        "servicetitle": "Service Title",
+        "amount": "Amount",
+        "status": "Status",
+        "date": "Date"
+      }
+    },
+    "funds": {
+      "title": "Fund Topup",
+      "paidtab": "Paid",
+      "failedtab": "Failed",
+      "addbutton": "Add Funds",
+      "request": {
+        "txnid": "TxnId",
+        "perticular": "Perticular",
+        "tax": "Tax",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date"
+      },
+      "errors": {
+        "featurenotavailable": "Add funds to your account is not available in this beta version. Fund your account from our website."
+      }
+    },
+    "transactions": {
+      "title": "Transactions List",
+      "completedtab": "Completed",
+      "adjustedtab": "Adjusted",
+      "item": {
+        "date": "Date",
+        "message": "Message",
+        "debit": "Debit",
+        "credit": "Credit",
+        "balancebefore": "Balance Before",
+        "balanceafter": "Balance After"
+      }
+    }
+  }
+}

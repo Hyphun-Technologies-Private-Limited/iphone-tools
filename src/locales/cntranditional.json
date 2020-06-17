@@ -1,0 +1,114 @@
+{
+    "general": {
+        "copyright": "iPhonecheck.services保留所有權利.",
+        "appversion": "應用版本: 1.0.0-測試版",
+        "account": "帳戶",
+        "apikey": " api 密鑰",
+        "continuebutton": "繼續",
+        "cancelbutton": "取消"
+    },
+    "messages": {
+        "success": {
+            "updated": "已成功更新",
+            "apikeysuccess": "已成功更新 Api "
+        },
+        "error": {
+            "invalid-data": "無效輸入, 請重試",
+            "apikeyerror": "請在設置中輸入 api 鍵",
+            "imeierror": "請輸入至少一個imei以繼續",
+            "serviceerror": "請選擇一項服務以繼續",
+            "norecords": "未搵到記錄",
+            "maxlimit": "您一次只能发送1000个IMEI"
+        },
+        "fetching": "正在提取記錄",
+        "confirm":{
+            "title":"你確定嗎？",
+            "message":"所有結果將丟失",
+            "agree":"是的，重置它",
+            "deny":"取消"
+        }
+    },
+    "menu": {
+        "app": "蘋果移動檢查",
+        "dashboard": "仪表板",
+        "transactions": "交易",
+        "neworder": "下订单",
+        "orderhistory": "下订单",
+        "fundsrequests": "资金要求",
+        "settings": "设定值",
+        "search": "搜索",
+        "login": "登錄",
+        "logout": "登出",
+        "error": "錯誤"
+    },
+    "pages": {
+        "dashboard": {
+            "title": "儀錶板",
+            "statstitle": "訂單統計",
+            "ordersproccessing": "處理緊嘅訂單",
+            "ordersrejected": "訂單食檸檬",
+            "orderscompleted": "訂單已完成",
+            "availablebalance": "可用餘額",
+            "amountlocked": "已鎖定金額",
+            "amountreceived": "收到嘅金額"
+        },
+        "neworder": {
+            "title": "放置新訂單",
+            "selectservice": "選擇服務",
+            "selectcategory": "選擇類別",
+            "imeiboxmessage": "每行輸入IMEI / SN",
+            "importbutton": "導入 imei ",
+            "submitbutton": "提交訂單",
+            "cancelbutton": "明確",
+            "exportbutton": "導出結果",
+            "imeiimported": "匯入的IMEI：",
+            "orderstatus": "訂單狀態：",
+            "submitread":"準備提交",
+            "processing":"處理中",
+            "completed":"完成，現在導出",
+            "orderprocessing":"訂單已在處理中，請等待或清除訂單以獲取新訂單"
+        },
+        "orderhistory": {
+            "title": "訂單歷史記錄",
+            "completedtab": "完成",
+            "rejectedtab": "拒絕",
+            "order": {
+                "orderid": "訂單標識",
+                "servicetitle": "服務標題",
+                "amount": "量",
+                "status": "地位",
+                "date": "日期"
+            }
+        },
+        "funds": {
+            "title": "基金充值",
+            "paidtab": "支付",
+            "failedtab": "炒",
+            "addbutton": "添加資金",
+            "request": {
+                "txnid": "交易唔均等性",
+                "perticular": "特定",
+                "tax": "稅",
+                "total": "總",
+                "status": "地位",
+                "date": "日期"
+            },
+            "errors": {
+                "featurenotavailable": "此測試版中唔提供向您的帳戶添加資金。 喺我哋嘅網站為您的帳戶泵水."
+            }
+        },
+        "transactions": {
+            "title": "事務列表",
+            "completedtab": "完成",
+            "adjustedtab": "調整",
+            "item": {
+                "date": "日期",
+                "message": "消息",
+                "debit": "借方",
+                "credit": "信用",
+                "balancebefore": "餘額之前",
+                "balanceafter": "餘額之後"
+            }
+        }
+    }
+}

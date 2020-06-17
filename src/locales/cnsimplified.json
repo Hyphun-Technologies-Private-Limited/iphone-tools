@@ -1,0 +1,114 @@
+{
+    "general": {
+        "copyright": "iPhonecheck.services保留所有权利.",
+        "appversion": "应用版本： 1.0.0 - 测试版",
+        "account": "帐户",
+        "apikey": " Api 密钥",
+        "continuebutton": "继续",
+        "cancelbutton": "取消"
+    },
+    "messages": {
+        "success": {
+            "updated": "已成功更新",
+            "apikeysuccess": "已成功更新 Api "
+        },
+        "error": {
+            "invalid-data": "无效输入，请重试",
+            "apikeyerror": "请在设置中输入 Api 键",
+            "imeierror": "请至少输入一个imei继续",
+            "serviceerror": "请选择一项服务以继续",
+            "norecords": "未找到记录",
+            "maxlimit": "您一次只能发送1000个IMEI",
+            "orderprocessing":"订单已在处理中，请等待或清除订单以获取新订单"
+        },
+        "fetching": "正在提取记录",
+        "confirm":{
+            "title":"你确定吗？",
+            "message":"所有结果将丢失",
+            "agree":"是的，重置它",
+            "deny":"取消"
+        }
+    },
+    "menu": {
+        "app": "苹果移动检查",
+        "dashboard": "仪表板",
+        "transactions": "交易",
+        "neworder": "下订单",
+        "orderhistory": "下订单",
+        "fundsrequests": "资金要求",
+        "settings": "设定值",
+        "search": "搜索",
+        "login": "登录",
+        "logout": "登出",
+        "error": "错误"
+    },
+    "pages": {
+        "dashboard": {
+            "title": "仪表 板",
+            "statstitle": "订单统计",
+            "ordersproccessing": "正在处理的订单",
+            "ordersrejected": "订单被拒绝",
+            "orderscompleted": "订单已完成",
+            "availablebalance": "可用余额",
+            "amountlocked": "已锁定金额",
+            "amountreceived": "收到的金额"
+        },
+        "neworder": {
+            "title": "放置新订单",
+            "selectservice": "选择服务",
+            "selectcategory": "选择类别",
+            "imeiboxmessage": "每行输入一次IMEI / SN",
+            "importbutton": "导入 IMEI ",
+            "submitbutton": "提交订单",
+            "cancelbutton": "明确",
+            "exportbutton": "导出结果",
+            "imeiimported": "汇入的IMEI：",
+            "orderstatus": "订单状态：",
+            "submitread":"准备提交",
+            "processing":"处理中",
+            "completed":"完成，现在导出"
+        },
+        "orderhistory": {
+            "title": "订单历史记录",
+            "completedtab": "完成",
+            "rejectedtab": "拒绝",
+            "order": {
+                "orderid": "订单标识",
+                "servicetitle": "服务标题",
+                "amount": "量",
+                "status": "地位",
+                "date": "日期"
+            }
+        },
+        "funds": {
+            "title": "基金充值",
+            "paidtab": "支付",
+            "failedtab": "失败",
+            "addbutton": "添加资金",
+            "request": {
+                "txnid": "事务标识",
+                "perticular": "特定",
+                "tax": "税",
+                "total": "总",
+                "status": "地位",
+                "date": "日期"
+            },
+            "errors": {
+                "featurenotavailable": "此测试版中不提供向您的帐户添加资金。从我们的网站为您的帐户提供资金."
+            }
+        },
+        "transactions": {
+            "title": "事务列表",
+            "completedtab": "完成",
+            "adjustedtab": "调整",
+            "item": {
+                "date": "日期",
+                "message": "消息",
+                "debit": "借方",
+                "credit": "信用",
+                "balancebefore": "余额之前",
+                "balanceafter": "余额后"
+            }
+        }
+    }
+}

@@ -1,0 +1,408 @@
+<template>
+    <div class="bg-black ml-56 flex-1 text-dark-white pt-10 px-10">
+        <div class="mb-4">
+            <h3 class="font-Oxygen text-2xl">{{$t('pages.neworder.title')}}</h3>
+        </div>
+        <div class="flex font-Oxygen w-full">
+            <div class="w-2/3 border-r border-black-light">
+                <h4 class="mb-3 pl-2">{{$t('pages.neworder.selectservice')}}</h4>
+                    <div class="h-200px  overflow-y-auto">
+                        <div class="mb-3 pl-2"  v-bind:value="item.id" :id="item.id" v-for="(item, index) in servicesFeed" :key="index">
+                            <input type="radio" :checked="index == 0" class="radio-button" :value="item.id" :name="item.name" @click="selectService(index,item.id)" v-model="selectedService"> &nbsp;&nbsp;{{item.name}} &nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="text-red">{{item.currency_code}}{{item.amount}}</span>
+                        </div>
+                    </div>
+            </div>
+            <div class="w-1/3 ml-4">
+                <div class="mt-10">
+                    <div class="flex font-Oxygen  ml-5 w-full text-center">
+                        <span class="w-full  mr-4 text-dark rounded p-3">
+                            <select class="form-control" v-on:change="selectCategory" v-model="selectedCategory">
+                                <option v-for="(item,index) in categoriesFeed" :value="item.id" :key="index">
+                                {{ item.name }}
+                                </option>
+                            </select>
+                        </span>
+                    </div>
+                    <!-- <div class="flex font-Oxygen  ml-5  mb-5 w-full text-center">
+                        <span class="w-full  mr-4 text-dark rounded p-3">
+                            <select class="form-control" v-model="selectedthreds" v-on:change="selectThread">
+                                <option v-for="item in threaditems" :value="item.value" :key="item.value">
+                                {{ item.label }}
+                                </option>
+                            </select>
+                        </span>
+                    </div> -->
+
+                    <div class="flex font-Oxygen  ml-5  mb-5 w-full text-center">
+                        <button :disabled='loading' @click="submitOrder()" class="w-1/2 mr-4 button-small text-dark rounded bg-white p-3">{{$t('pages.neworder.submitbutton')}}</button>
+                        <span class="w-1/2  mr-4  button-small text-dark rounded bg-white p-3" @click="show">{{$t('pages.neworder.importbutton')}}</span>
+                    </div>
+                    <div class="flex font-Oxygen ml-5 w-full text-center">
+                        <span @click="reset()" class="w-1/2 mr-4 button-small text-dark rounded bg-white p-3">{{$t('pages.neworder.cancelbutton')}}</span>
+                        <download-csv class="w-1/2  mr-4  button-small text-dark rounded bg-white p-3" 
+                            :data   = "orderresults">
+                            <span>{{$t('pages.neworder.exportbutton')}}</span>
+                        </download-csv>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full mt-10 h-350px overflow-y-auto">
+            <!-- <hot-table :settings="settings" ref="ordergrid"></hot-table> -->
+
+            <grid :data="gridData" :columns="settings.colHeaders"></grid>
+        </div>
+        <modal name="topup-popup" @before-open="beforeOpen" >
+            <div class="p-4">
+                <textarea class="w-full h-200px border" v-model="importedImei" placeholder="Enter IMEI/SN ONE PER LINE" ></textarea>
+                <div class="right-align mt-4">
+                    <span @click="importImei()"  class="button-small text-dark-white rounded bg-info-text text-white p-3">Import</span>
+                    <span @click="hide()" class="button-small text-dark-white rounded bg-red text-white p-3">Cancel</span>
+                </div>
+            </div>
+        </modal>
+        <loading :active.sync="isLoading" 
+        :can-cancel="false" 
+        :is-full-page="fullPage"></loading>
+
+    </div>
+</template>
+<style src="../../node_modules/handsontable/dist/handsontable.full.css"></style>
+<script>
+const storage = require('electron-json-storage');
+import ApiService from '@/utils/services/api-service';
+import { HotTable } from '@handsontable/vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
+import Grid from '@/components/GridView';
+export default {
+    data:function(){
+       return {
+        apikey:'',
+        isMounted:false,
+        isApiKeyExists:false,
+        orderProcessing:false,
+        socketToken:'',
+        submitBtnText:'Submit Order',
+        isLoading:false,
+        loading:false,
+        fullPage: true,
+        orderPlaced:true,
+        isProcessing:false,
+        categoriesFeed:[],
+        servicesFeed:[],
+        completedQueue:[],
+        selectedCategory:1,
+        selectedService:0,
+        count:0,
+        importedImei:'',
+        orderResponseFeed:[],
+        imeiLoadedList:[],
+        processingImeis:[],
+        selectedthreds:1,
+        tableheads:[],
+        imeis:[],
+        settings:{
+          data: [[]],
+          minCols: 8,
+          minRows: 14,
+          colHeaders: [],
+          rowHeaders: true,
+          readOnly: true,
+          stretchH: 'all',
+          stretchV: 'all',
+          licenseKey: 'non-commercial-and-evaluation'
+        },
+        orderresults:[],
+        gridData: [],
+        gridColumns: [],
+      }
+    },
+    components: {
+      HotTable,
+      Loading,
+      Grid
+    },
+    sockets: {
+        connect() {
+        },
+        disconnect() {
+            //this.isConnected = false;
+        },
+        orderstatus(data) {
+            console.log(data);
+            this.updateOrderGrid(data);    
+        }
+    },
+    methods:{
+        storeData(key,sdata){
+            storage.set(key,sdata,(err) => {
+                if (err)  alert(err);
+            })
+            this.socketToken = sdata;
+        },
+        fetchData(key){
+            var ve = this;
+            storage.get(key, (err, data) => {
+                ve.socketToken = data;                
+            })
+        },
+        show (){
+            this.$modal.show('topup-popup');
+        },
+        hide (){
+            this.$modal.hide('topup-popup');
+        },
+        beforeOpen(){
+            //this.importedImei = '';
+        },
+        importImei(){
+            if(this.isApiKeyExists){
+                this.$socket.client.emit('fetchtoken');
+                var imeis = this.importedImei.split('\n');
+                if(imeis.length < 1001){
+                    this.settings.data = [];
+                    this.imeiLoadedList = [];
+                    for(var i = 0; i<imeis.length;i++){
+                        this.settings.data.push([imeis[i].toString()]);
+                        this.imeiLoadedList.push(imeis[i].toString());
+                    }
+                    this.hide();
+                }else{
+                    this.hide();
+                   this.$swal(this.$t('messages.error.maxlimit')); 
+                }
+            }else{
+                this.$swal(this.$t('messages.error.apikeyerror'));
+            }
+        },
+        selectThread(){
+            //alert(this.selectedthreds);
+        },
+        selectCategory(){
+           this.fetchServices();
+        },
+        selectService(selected,id){
+          var serviceItem = this.servicesFeed[selected];
+          var heads = serviceItem.custom_heads.split('@@');
+          this.settings.colHeaders = heads;
+          this.selectedService = id;
+        },
+        fetchServices(){
+            if(this.isApiKeyExists){
+            var ve = this;
+            ve.isLoading = true;
+            if(ve.apikey == ''){
+                storage.get('apikey', (err, data) => {
+                    ve.apikey = data;         
+                })
+            }
+            ApiService.fetchServices(ve.selectedCategory,ve.apikey).then(
+                response => {
+                    if (!response.data.error) {
+                        var tempfeed = [];
+                        response.data.response.map(function(idx){
+                        var feeddata = 
+                        {
+                            id: idx.id,
+                            category: idx.category,
+                            name: idx.name,
+                            code: idx.code,
+                            service_id: idx.service_id,
+                            amount: idx.amount,
+                            currency: idx.currency,
+                            currency_code: idx.currency_code,
+                            instant: idx.instant,
+                            type: idx.type,
+                            custom_heads: idx.custom_data,
+                            user_access: idx.user_access,
+                        }
+                        tempfeed.push(feeddata) 
+                        });
+                        ve.servicesFeed = [];
+                        ve.servicesFeed = tempfeed;
+                        ve.isLoading = false;
+                    } else {
+                      //console.log(response.data.error);
+                    }
+                }//,
+                // (err) => {
+                //     //console.log(err);
+                //     //ve.$router.push({ path: '/user/logout' })
+                // }
+            );
+            }else{
+                if(this.isMounted){
+                    this.$swal(this.$t('messages.error.apikeyerror'));
+                }
+            }
+        },
+        fetchCatrgories(){
+            var ve = this;
+            ve.isLoading = true;
+            ApiService.fetchCategories().then(
+                response => {
+                    if (!response.data.error) {
+                        var tempfeed = [];
+                        response.data.response.map(function(idx){
+                        var feeddata = 
+                        {
+                            id: idx.id,
+                            name: idx.name,
+                        }
+                        tempfeed.push(feeddata) 
+                        });
+                        ve.categoriesFeed = [];
+                        ve.categoriesFeed = tempfeed;
+                        ve.isLoading = false;
+                    } else {
+                      //console.log(response.data.error);
+                    }
+                }
+                //,
+                // (err) => {
+                //     //console.log(err);
+                //     //ve.$router.push({ path: '/user/logout' })
+                // }
+            );
+            
+        },
+        submitOrder(){
+            if(this.isApiKeyExists){
+                var ve = this;
+                if(this.isLoading == false){
+                    if(this.selectedService == 0 || this.selectedService == ''){
+                        alert("Please select a service to proceed");
+                        return false;
+                    }
+                     if(ve.apikey == ''){
+                        storage.get('apikey', (err, data) => {
+                            ve.apikey = data;         
+                        })
+                    }
+
+                    if(ve.apikey == ''){
+                        alert(ve.$t('messages.error.apikeyerror'));
+                        return false;
+                    }
+                    
+                    //ve.loading = true;
+                    //ve.isLoading = true;
+                    ve.submitBtnText = 'Processing...';
+                        ApiService.placeOrder(ve.imeiLoadedList,this.selectedService,this.socketToken,this.apikey).then(
+                            response => {
+                                if (response) {
+                                    //console.log(response);
+                                    //response
+                                }
+                            },
+                            (err) => {
+                                alert(err);
+                            }
+                        );
+                }
+            }else{
+                this.$swal(this.$t('messages.error.apikeyerror'));
+            }
+        },
+        redrawTable() {
+            if(this.count == 2){
+                this.$refs.ordergrid.hotInstance.render();
+                this.count = 0;
+            }else{
+                this.count++;
+            }
+            if(this.completedQueue.length == this.imeiLoadedList.length){
+                this.loading = false;
+                this.isLoading = false;
+                this.submitBtnText = 'Submit Order';
+                this.orderresults = this.filter_array(this.settings.data);
+                this.$refs.ordergrid.hotInstance.render();
+            }
+            //this.orderresults = this.settings.data.filter(function (e) {return e != null;});
+        },
+        updateOrderGrid(data){
+            //alert(JSON.stringify(data));
+                if(data.eventType == 100){
+                    this.storeData('socket_token',data.socketid);
+                }else if(data.eventtype == 200){
+                    console.log(data.data[0]['imei']);
+                    var responseData = data.data;
+                    var ve = this;
+                    var imei = responseData[0]['imei'];
+                    var status = responseData[0]['status'];
+                    var message = responseData[0]['message'];
+                    var colvals = [];
+                    this.completedQueue.push(imei);
+                    colvals.push(imei.toString());
+                    var imeix = '';
+                    if(status == "success"){
+                        //this.settings.colHeaders = colheads;
+                        var keyobj = responseData[0]['result'];
+                        var fk = Object.keys(keyobj);
+                        for (var x of fk) {
+                            if(responseData[0]['result'][x] != ''){
+                                colvals.push(responseData[0]['result'][x]);
+                            }
+                        }            
+                        imeix = ve.imeiLoadedList.indexOf(imei.toString());
+                        if(imeix > -1) {
+                                ve.settings.data.splice(imeix, 1,colvals);
+                        }                   
+                    }else{
+                        //console.log(imei);
+                        imeix = ve.imeiLoadedList.indexOf(imei.toString());
+                        if(imeix > -1) {
+                            if(ve.settings.data[imeix][0]  == imei.toString()){
+                                var tempChild = [ve.settings.data[imeix][0].toString(),message];
+                                ve.settings.data[imeix] = tempChild;
+                            }
+                        }
+                    }
+                    //this.redrawTable();
+                }
+        },
+        checkApiKey(){
+            storage.get('apikey', (err, data) => {
+            if(data == ''){
+                this.$swal(this.$t('messages.error.apikeyerror'));
+            }else{
+                this.apikey = data; 
+                this.isApiKeyExists = true; 
+                this.fetchServices();
+                this.isMounted = true;
+            }
+            })
+        },
+        filter_array(test_array) {
+            var filteredArray = []
+            filteredArray.push(this.settings.colHeaders);
+            test_array.map(function(val){
+                var temp = [];
+                for (var x of val) {
+                if(x != null){
+                    temp.push(x);
+                }
+                }
+                if(temp.length > 0){
+                    filteredArray.push(temp);
+                }
+            }); 
+            return filteredArray;
+        },
+        reset(){
+            this.selectedService = '';
+            this.settings.data = [[]];
+            this.completedQueue = [];
+            this.imeiLoadedList = [];
+            this.$refs.ordergrid.hotInstance.render();
+        }
+    },
+    mounted(){
+        this.fetchCatrgories();
+        this.checkApiKey();
+        this.$socket.client.emit('fetchtoken');
+    }
+}
+</script>

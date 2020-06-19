@@ -4,7 +4,7 @@
         <div class="container mx-auto h-full flex justify-center items-center">
             <div class="w-1/3">
                 <h1 class="font-hairline mb-6 text-center"><img src="@/assets/logo-ipcs.png" alt="image" class="w-3/5"></h1>
-                <h4 class="font-Oxygen mb-6 text-center text-white">Welcome To iPhoneChecks Services</h4>
+                <h4 class="font-Oxygen mb-6 text-center text-white">Welcome To iPhoneTools</h4>
                 <div class="border-teal p-8 border-t-12 bg-dark mb-6 rounded-lg shadow-lg">
                     <div class="mb-4">
                         <label class="font-bold text-white block mb-2">Enter Your ApiKey</label>

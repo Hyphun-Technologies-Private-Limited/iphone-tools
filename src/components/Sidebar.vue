@@ -2,7 +2,8 @@
   <div class="w-56 bg-dark text-dark-white border-r border-black-light fixed min-h-screen pt-8 font-Oxygen">
     
     <div class="search-container text-center p-5 mt-4 relative">
-      <img src="@/assets/logo-ipcs.png" alt="image" class="rounded-full w-20">
+      <!-- <img src="@/assets/logo-ipcs.png" alt="image" class="rounded-full w-20"> -->
+      iPhoneTools
     </div>
 
     <div class="sidebar-icons pt-4">

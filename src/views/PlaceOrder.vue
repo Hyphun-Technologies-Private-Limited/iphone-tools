@@ -176,8 +176,10 @@ export default {
                     this.settings.data = [];
                     this.imeiLoadedList = [];
                     for(var i = 0; i<imeis.length;i++){
-                        this.settings.data.push([imeis[i].toString()]);
-                        this.imeiLoadedList.push(imeis[i].toString());
+                        if(imeis[i].toString() != ''){
+                            this.settings.data.push([imeis[i].toString()]);
+                            this.imeiLoadedList.push(imeis[i].toString());
+                        }
                     }
                     this.totalimported = this.imeiLoadedList.length;
                     this.hide();
@@ -286,7 +288,6 @@ export default {
                 //     //ve.$router.push({ path: '/user/logout' })
                 // }
             );
-            
         },
         submitOrder(){
             if(this.isApiKeyExists){
@@ -346,6 +347,7 @@ export default {
                 this.orderstatus = 2;
                 this.imeiLoadedList = [];
                 this.importedImei = '';
+                this.gridExportData = [];
             }
         },
         updateOrderGrid(data){

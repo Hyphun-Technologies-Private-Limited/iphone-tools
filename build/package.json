@@ -1,8 +1,8 @@
 {
-  "name": "iphonechecks-services",
+  "name": "iphonetools",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "Client App For iPhonechecks.services",
+  "description": "Client App For iPhonetools.io",
   "author": "Harry <h.ar_ry@hotmail.com>",
   "main": "./app/index.js",
   "scripts": {

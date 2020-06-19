@@ -3,6 +3,4 @@ export const localeOptions = [
     { id: 'en', name: 'English'},
     { id: 'es', name: 'Español'},
 ]
-export const apiUrl = '//www.iphonechecks.services/api/'
-
-
+export const apiUrl = '//www.iphonetools.io/api/'

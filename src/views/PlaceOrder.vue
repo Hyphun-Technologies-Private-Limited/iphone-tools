@@ -30,7 +30,7 @@
                         <span class="w-1/2  mr-4  button-small text-dark rounded bg-white p-3 cursor-pointer" @click="show">{{$t('pages.neworder.importbutton')}}</span>
                     </div>
                     <div class="flex font-Oxygen ml-5 w-full text-center">
-                        <span @click="reset()" class="w-1/2 mr-4 button-small text-dark rounded bg-white p-3 cursor-pointer">{{$t('pages.neworder.cancelbutton')}}</span>
+                        <span @click="reset(1)" class="w-1/2 mr-4 button-small text-dark rounded bg-white p-3 cursor-pointer">{{$t('pages.neworder.cancelbutton')}}</span>
                         <download-csv class="w-1/2  mr-4  button-small text-dark rounded bg-white p-3" 
                             :data   = "orderresults">
                             <span class="cursor-pointer">{{$t('pages.neworder.exportbutton')}}</span>
@@ -195,21 +195,23 @@ export default {
            this.fetchServices();
         },
         selectService(selected,id){
-            if(this.orderstatus != 0){
-                this.reset();
-            }
-          var serviceItem = this.servicesFeed[selected];
-          var masks = serviceItem.custom_heads.split('@@');
-          var headws = [];
-          var headwos = [];
-          masks.map(function(gval){
-               var temphead = gval.split('_');
-                headws.push(temphead[0]);
-                headwos.push(temphead[1]);
-          });
-          this.settings.colHeaders = headwos;
-          this.tableheads = headws;
-          this.selectedService = id;
+            //if(this.orderstatus != 0){
+                this.reset(0);
+            //}else{
+                var serviceItem = this.servicesFeed[selected];
+                var masks = serviceItem.custom_heads.split('@@');
+                var headws = [];
+                var headwos = [];
+                masks.map(function(gval){
+                    var temphead = gval.split('_');
+                        headws.push(temphead[0]);
+                        headwos.push(temphead[1]);
+                });
+                this.settings.colHeaders = headwos;
+                this.tableheads = headws;
+                
+                this.selectedService = id;
+            //}
         },
         fetchServices(){
             if(this.isApiKeyExists){
@@ -433,38 +435,59 @@ export default {
             }); 
             return filteredArray;
         },
-        reset(){
+        reset(mode){
             var ve = this;
-            this.$swal({
-            title: ve.$t('messages.confirm.title'),
-            text: ve.$t('messages.confirm.message'),
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: ve.$t('messages.confirm.agree'),
-            cancelButtonText: ve.$t('messages.confirm.deny')
-            }).then((result) => {
-            if (result.value) {
-                ve.selectedService = '';
-                ve.settings.data = [[]];
-                ve.gridData = [];
-                ve.gridExportData = [];
-                ve.completedQueue = [];
-                ve.imeiLoadedList = [];
-                ve.importedImei = '';
-                ve.settings.colHeaders = [];
-                ve.tableheads = [];
-                ve.orderstatus = 0;
-                ve.totalimported = 0;
-            }
-            });
+            if(mode == 1){
+                this.$swal({
+                title: ve.$t('messages.confirm.title'),
+                text: ve.$t('messages.confirm.message'),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: ve.$t('messages.confirm.agree'),
+                cancelButtonText: ve.$t('messages.confirm.deny')
+                }).then((result) => {
+                if (result.value) {
+                    ve.selectedService = '';
+                    ve.settings.data = [[]];
+                    ve.gridData = [];
+                    ve.gridExportData = [];
+                    ve.completedQueue = [];
+                    ve.imeiLoadedList = [];
+                    ve.importedImei = '';
+                    ve.settings.colHeaders = [];
+                    ve.tableheads = [];
+                    ve.orderstatus = 0;
+                    ve.totalimported = 0;
+                }
+                });
+            }else{
+                if(this.orderstatus != 0){
+                    ve.selectedService = '';
+                    ve.settings.data = [[]];
+                    ve.gridData = [];
+                    ve.gridExportData = [];
+                    ve.completedQueue = [];
+                    ve.imeiLoadedList = [];
+                    ve.importedImei = '';
+                    ve.settings.colHeaders = [];
+                    ve.tableheads = [];
+                    ve.orderstatus = 0;
+                    ve.totalimported = 0;
+                }
+            }  
         }
     },
     mounted(){
         this.fetchCatrgories();
         this.checkApiKey();
         this.$socket.client.emit('fetchtoken');
+    },
+    watch: {
+        selectedService: function(newValue, oldValue) {
+            console.log(newValue, oldValue)
+        }
     }
 }
 </script>

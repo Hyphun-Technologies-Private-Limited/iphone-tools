@@ -138,6 +138,7 @@ export default {
     },
     sockets: {
         connect() {
+            console.log('connected');
         },
         disconnect() {
             //this.isConnected = false;
@@ -353,10 +354,11 @@ export default {
             }
         },
         updateOrderGrid(data){
-            //alert(JSON.stringify(data));
+            //console.log(JSON.stringify(data));
                 if(data.eventType == 100){
                     this.storeData('socket_token',data.socketid);
                 }else if(data.eventtype == 200){
+                    //console.log(data.data);
                     var responseData = data.data;
                     var ve = this;
                     //var colvals = [];

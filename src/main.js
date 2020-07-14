@@ -22,7 +22,7 @@ import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
 const socket = io('http://178.128.21.236/');
 Vue.prototype.$UserApiKey = '';
-Vue.prototype.$locale = 'en';
+Vue.prototype.$locale = 'cns';
 Vue.use(VModal);
 Vue.component('downloadCsv', JsonCSV);
 Vue.use(VTooltip);
@@ -61,7 +61,7 @@ const messages = { en: en, cnt: cnt,cns:cns };
 
 const i18n = new VueI18n({
   locale: Vue.prototype.$locale,
-  fallbackLocale: 'en',
+  fallbackLocale: 'cns',
   messages
 });
 
@@ -81,3 +81,8 @@ export default new Vue({
 storage.get('apikey', (err, data) => {
   Vue.prototype.$UserApiKey = data;
 })
+
+//storage.get('locale', (err, data) => {
+Vue.$locale = 'cns';
+storage.set('locale', 'cns', () => {});
+//})

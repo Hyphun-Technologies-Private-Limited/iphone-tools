@@ -5,7 +5,10 @@
         "account": "帐户",
         "apikey": " Api 密钥",
         "continuebutton": "继续",
-        "cancelbutton": "取消"
+        "cancelbutton": "取消",
+        "balance":"平衡",
+        "refresh_balance":"刷新余额",
+        "load_balance":"负载均衡"
     },
     "messages": {
         "success": {

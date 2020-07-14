@@ -145,7 +145,7 @@ export default {
             this.$modal.hide('import-popup');
       },
       openWin(){
-        require('electron').shell.openExternal('http://iphonechecks.services');
+        require('electron').shell.openExternal('http://iphonetools.io');
       },
       checkApiKey(){
         storage.get('apikey', (err, data) => {

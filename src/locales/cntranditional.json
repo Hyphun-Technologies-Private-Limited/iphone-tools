@@ -5,7 +5,10 @@
         "account": "帳戶",
         "apikey": " api 密鑰",
         "continuebutton": "繼續",
-        "cancelbutton": "取消"
+        "cancelbutton": "取消",
+        "balance":"平衡",
+        "refresh_balance":"刷新余額",
+        "load_balance":"負載均衡"
     },
     "messages": {
         "success": {

@@ -5,7 +5,10 @@
     "account": "Account",
     "apikey": "ApiKey",
     "continuebutton": "Continue",
-    "cancelbutton": "Cancel"
+    "cancelbutton": "Cancel",
+    "balance":"Balance",
+    "refresh_balance":"Refresh Balance",
+    "load_balance":"Load Balance"
   },
   "messages": {
     "success": {

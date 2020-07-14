@@ -5,9 +5,9 @@ Vue.use(Router);
 const routes = [
   {
     path: '/',
-    name: 'dashboard',
+    name: 'neworder',
     //beforeEnter: AuthRequired,
-    component: () => import(/* webpackChunkName: "create" */ '@/views/Dashboard.vue')
+    component: () => import(/* webpackChunkName: "create" */ '@/views/PlaceOrder.vue')
   },
   {
     path: '/orders',

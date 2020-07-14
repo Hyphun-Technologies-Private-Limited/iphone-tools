@@ -44,7 +44,7 @@ export default {
        return {
         apikey:'',
         pageTitle:'Settings',
-        selectedlocale:'en',
+        selectedlocale:'cns',
         languagearray:[
           {'label':'English','value':'en'},
           {'label':'Chinese Simplified','value':'cns'},
@@ -95,6 +95,7 @@ export default {
             }
         })
         storage.get('locale', (err, data) => {
+            //console.log(data);
             ve.selectedlocale = data;    
             ve.$locale = data;      
         })

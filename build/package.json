@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "description": "Client App For iPhonetools.io",
-  "author": "Harry <h.ar_ry@hotmail.com>",
+  "author": "iPhonetools.io",
   "main": "./app/index.js",
   "scripts": {
     "postinstall": "install-app-deps",
@@ -12,8 +12,8 @@
     "dist": "build"
   },
   "build": {
-    "appId": "services.iphonechecks.app",
-    "category": "Iphonechecks Services",
+    "appId": "io.iphonetools.app",
+    "category": "Utilities",
     "dmg": {
       "contents": [
         {

@@ -7,8 +7,9 @@
             <div class="w-2/3 border-r border-black-light">
                 <h4 class="mb-3 pl-2">{{$t('pages.neworder.selectservice')}}</h4>
                     <div class="h-200px  overflow-y-auto">
-                        <div class="mb-3 pl-2"  v-bind:value="item.id" :id="item.id" v-for="(item, index) in servicesFeed" :key="index">
-                            <input type="radio" :checked="index == 0" class="radio-button" :value="item.id" :name="item.name" @click="selectService(index,item.id)" v-model="selectedService"> &nbsp;&nbsp;{{item.name}} &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="mb-3 pl-2 cursor-pointer" v-bind:value="item.id" :id="item.id" v-for="(item, index) in servicesFeed" :key="index">
+                            <input type="radio" :checked="index == 0" class="radio-button" :value="item.id" :name="item.name" @click="selectService(index,item.id)" v-model="selectedService"> 
+                            &nbsp;&nbsp;{{item.name}} &nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="text-red">{{item.currency_code}}{{item.amount}}</span>
                         </div>
                     </div>
@@ -138,7 +139,7 @@ export default {
     },
     sockets: {
         connect() {
-            console.log('connected');
+            //console.log('connected');
         },
         disconnect() {
             //this.isConnected = false;
@@ -161,7 +162,12 @@ export default {
             })
         },
         show (){
-            this.$modal.show('topup-popup');
+            if(this.orderstatus != 0){
+                this.reset(1);
+                return false;
+            }else{
+                this.$modal.show('topup-popup');
+            }
         },
         hide (){
             this.$modal.hide('topup-popup');
@@ -171,23 +177,25 @@ export default {
         },
         importImei(){
             if(this.isApiKeyExists){
-                this.$socket.client.emit('fetchtoken');
-                var imeis = this.importedImei.split('\n');
-                if(imeis.length <= 2500){
-                    this.settings.data = [];
-                    this.imeiLoadedList = [];
-                    for(var i = 0; i<imeis.length;i++){
-                        if(imeis[i].toString() != ''){
-                            this.settings.data.push([imeis[i].toString()]);
-                            this.imeiLoadedList.push(imeis[i].toString());
+                
+                    this.$socket.client.emit('fetchtoken');
+                    var imeis = this.importedImei.split('\n');
+                    if(imeis.length <= 2500){
+                        this.settings.data = [];
+                        this.imeiLoadedList = [];
+                        for(var i = 0; i<imeis.length;i++){
+                            if(imeis[i].toString() != ''){
+                                this.settings.data.push([imeis[i].toString()]);
+                                this.imeiLoadedList.push(imeis[i].toString());
+                                this.imeis.push(imeis[i].toString());
+                            }
                         }
+                        this.totalimported = this.imeiLoadedList.length;
+                        this.hide();
+                    }else{
+                        this.hide();
+                    this.$swal(this.$t('messages.error.maxlimit')); 
                     }
-                    this.totalimported = this.imeiLoadedList.length;
-                    this.hide();
-                }else{
-                    this.hide();
-                   this.$swal(this.$t('messages.error.maxlimit')); 
-                }
             }else{
                 this.$swal(this.$t('messages.error.apikeyerror'));
             }
@@ -196,9 +204,10 @@ export default {
            this.fetchServices();
         },
         selectService(selected,id){
-            //if(this.orderstatus != 0){
-                this.reset(0);
-            //}else{
+            if(this.orderstatus != 0){
+                this.reset(1);
+                return false;
+            }else{
                 var serviceItem = this.servicesFeed[selected];
                 var masks = serviceItem.custom_heads.split('@@');
                 var headws = [];
@@ -212,7 +221,7 @@ export default {
                 this.tableheads = headws;
                 
                 this.selectedService = id;
-            //}
+            }
         },
         fetchServices(){
             if(this.isApiKeyExists){
@@ -388,15 +397,8 @@ export default {
                     //     //ve.gridExportData.push(responseData[0]['result']);
                     // }else{
 
-                    //     //console.log(this.settings.colHeaders);
-                       
-                        
                     //     console.log(temp)
-
                     //     ve.gridData.push(temp);
-
-                    //     // var tmp1 = {"#":this.gridExportData.length+1,ky1:responseData[0]['imei'],ky2:responseData[0]['result']['MESSAGE']};
-                    //     // ve.gridExportData.push(tmp1);
                     // }
                     this.redrawTable();
                 }
@@ -414,15 +416,21 @@ export default {
             })
         },
         filter_array(test_array) {
+            var ve = this;
             var filteredArray = []
             filteredArray.push(this.tableheads);
             test_array.map(function(val){
                 var temp = [];
+                var originalIndex = '';
                 var keyobj = val;
                 var fk = Object.keys(keyobj);
                 //var i = 1;
                 for (var x of fk) {
                     if(val[x] != ''){
+                        var inx = ve.imeis.indexOf(val[x]);
+                        if(inx != -1){
+                            originalIndex = inx;
+                        }
                         if(Number.isInteger(val[x])){
                             temp = [val[x]].concat(temp);
                         }else{
@@ -432,7 +440,8 @@ export default {
                     }
                 }
                 if(temp.length > 0){
-                    filteredArray.push(temp);
+                    //filteredArray.push(temp);
+                    filteredArray[originalIndex+1] = temp;
                 }
             }); 
             return filteredArray;
@@ -454,6 +463,7 @@ export default {
                     ve.selectedService = '';
                     ve.settings.data = [[]];
                     ve.gridData = [];
+                    ve.imeis = [];
                     ve.gridExportData = [];
                     ve.completedQueue = [];
                     ve.imeiLoadedList = [];
@@ -469,6 +479,7 @@ export default {
                     ve.selectedService = '';
                     ve.settings.data = [[]];
                     ve.gridData = [];
+                    ve.imeis = [];
                     ve.gridExportData = [];
                     ve.completedQueue = [];
                     ve.imeiLoadedList = [];
@@ -487,9 +498,9 @@ export default {
         this.$socket.client.emit('fetchtoken');
     },
     watch: {
-        selectedService: function(newValue, oldValue) {
-            console.log(newValue, oldValue)
-        }
+        // selectedService: function(newValue, oldValue) {
+        //     //console.log(newValue, oldValue)
+        // }
     }
 }
 </script>

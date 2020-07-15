@@ -18,7 +18,7 @@ function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({ width: 1280, height: 800, titleBarStyle: 'hiddenInset' })
   win.setOpacity(0.99)
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
   if (isDevelopment) {
     // Load the url of the dev server if in development mode

@@ -423,6 +423,7 @@ export default {
                 var temp = [];
                 var originalIndex = '';
                 var keyobj = val;
+
                 var fk = Object.keys(keyobj);
                 //var i = 1;
                 for (var x of fk) {
@@ -441,6 +442,8 @@ export default {
                 }
                 if(temp.length > 0){
                     //filteredArray.push(temp);
+                    //console.log(temp);
+                    temp[0] = originalIndex+1;
                     filteredArray[originalIndex+1] = temp;
                 }
             }); 
